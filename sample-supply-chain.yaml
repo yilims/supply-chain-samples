@@ -53,11 +53,6 @@ spec:
         kind: ClusterConfigTemplate
         name: app-config
     - name: config-writer
-      params:
-      - name: registry
-        value:
-          repository: package
-          server: liyilnptest.azurecr.io
       templateRef:
         kind: ClusterTemplate
         name: config-writer-template
