@@ -1,0 +1,21 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: demo-namespace-java-source-1
+  namespace: demo-namespace
+  labels:
+    app.tanzu.vmware.com/workload-type: web
+spec:
+  serviceAccountName: share-controller-sa
+  source:
+    git:
+      url: https://github.com/yilims/java-native.git
+      ref:
+        branch: azure
+  build:
+    env:
+      - name: BP_MAVEN_BUILD_ARGUMENTS
+        value: "-Dmaven.test.skip=true package"
+  params:
+    - name: image_prefix
+      value: #@ "liyikpacktest.azurecr.io/liyidockid/cartographer-" + str(data.values.namespace) +"-"
