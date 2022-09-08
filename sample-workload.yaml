@@ -12,10 +12,25 @@ spec:
       url: https://github.com/yilims/java-native.git
       ref:
         branch: azure
+  builder:
+    name: sample-builder
+    kind: ClusterBuilder
+  cache:
+    volume:
+      size: "1.5Gi"
+  successBuildHistoryLimit: 10
+  failedBuildHistoryLimit: 10
+  params:
+    - name: image_prefix
+      value: demoacr.azurecr.io/demo-repo/cartographer-demons
+    - name: builder_name
+      default: java-builder
   build:
     env:
       - name: BP_MAVEN_BUILD_ARGUMENTS
         value: "-Dmaven.test.skip=true package"
-  params:
-    - name: image_prefix
-      value: demoacr.azurecr.io/demo-repo/cartographer-demons
+    resources:
+      requests:
+      limits:
+        cpu: "0.5"
+        memory: "1Gi"
