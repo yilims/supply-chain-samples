@@ -2,11 +2,11 @@ apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
   name: java-source-1
-  namespace: testns
+  namespace: demons
   labels:
     app.tanzu.vmware.com/workload-type: web
 spec:
-  serviceAccountName: share-controller-sa
+  serviceAccountName: demo-sa
   source:
     git:
       url: https://github.com/yilims/java-native.git
@@ -18,4 +18,4 @@ spec:
         value: "-Dmaven.test.skip=true package"
   params:
     - name: image_prefix
-      value: liyikpacktest.azurecr.io/test-repo/cartographer-testns
+      value: demoacr.azurecr.io/demo-repo/cartographer-demons
