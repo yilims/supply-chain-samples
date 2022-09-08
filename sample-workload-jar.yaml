@@ -1,0 +1,34 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: java-jar-1
+  namespace: demons
+  labels:
+    app.tanzu.vmware.com/workload-type: web
+spec:
+  serviceAccountName: demo-sa
+  source:
+    blob:
+      url: https://mssdevsharedstorage.file.core.windows.net/demo-app/directjar/java-0.0.1-SNAPSHOT.jar
+  builder:
+    name: sample-builder
+    kind: ClusterBuilder
+  cache:
+    volume:
+      size: "1.5Gi"
+  successBuildHistoryLimit: 10
+  failedBuildHistoryLimit: 10
+  params:
+    - name: image_prefix
+      value: demoacr.azurecr.io/demo-repo/cartographer-demons
+    - name: builder_name
+      default: java-builder
+  build:
+    env:
+      - name: BPL_JMX_ENABLED
+        value: "true"
+    resources:
+      requests:
+      limits:
+        cpu: "0.5"
+        memory: "512Mi"

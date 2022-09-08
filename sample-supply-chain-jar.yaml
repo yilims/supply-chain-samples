@@ -1,0 +1,46 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterSupplyChain
+metadata:
+  name: supply-chain-directjar
+spec:
+  selector:
+    app.tanzu.vmware.com/workload-type: web-directjar
+  params:
+    - default: default-sa
+      name: serviceAccount
+  resources:
+    - name: image-builder
+      templateRef:
+        kind: ClusterImageTemplate
+        name: image-directjar
+      params:
+        - name: image_prefix
+          default: test
+        - name: builder_name
+          default: java-builder
+        - name: jar_source
+          default: jar-source
+    - name: config-provider
+      images:
+        - resource: image-builder
+          name: image
+      templateRef:
+        kind: ClusterConfigTemplate
+        name: convention-template
+    - name: app-config
+      images:
+        - resource: image-builder
+          name: image
+      configs:
+        - name: config
+          resource: config-provider
+      templateRef:
+        kind: ClusterConfigTemplate
+        name: app-config
+    - name: config-writer
+      templateRef:
+        kind: ClusterTemplate
+        name: config-writer-template
+      configs:
+        - resource: app-config
+          name:  config
